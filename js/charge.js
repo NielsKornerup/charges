@@ -7,7 +7,7 @@ var chargeSize= 5;
 var numCharges = 25;
 var allPosCharge=[];
 var allNegCharge=[];
-var magConstant = 20;
+var magConstant = 5;
 var PI = 3.141592;
 var maxSpeed = 3;
 var maxDist =30;
@@ -19,62 +19,62 @@ function initializeCharge() {
         charge.y = Math.random() * height;
         charge.xSpeed = Math.random() * chargeSpeed;
         charge.ySpeed = Math.random() * chargeSpeed;
-		var cha = (Math.random() * 2) -1;
-		if(cha>0){
-			allPosCharge.push(charge);
-		}
-		else{
-			allNegCharge.push(charge);
-		}
+var cha = (Math.random() * 2) -1;
+if(cha>0){
+allPosCharge.push(charge);
+}
+else{
+allNegCharge.push(charge);
+}
     }
 }
 
 function moveCharges(){
-	for (var x = 0; x < allPosCharge.length; x++) {
-		for (var y = 0; y < allNegCharge.length; y++) {
-			var difX = (allPosCharge[x].x-allNegCharge[y].x);
-			var difY = (allPosCharge[x].y-allNegCharge[y].y);
-			var dist =Math.sqrt((Math.pow(difX,2)+Math.pow(difY,2)));
-			if(dist>5&&dist<maxDist){
-				allPosCharge[x].xSpeed-=difX/Math.pow(dist,2);
-				allPosCharge[x].ySpeed-=difY/Math.pow(dist,2);
-				allNegCharge[y].xSpeed+=difX/Math.pow(dist,2);
-				allNegCharge[y].ySpeed+=difY/Math.pow(dist,2);
-			}
-		}
-	}
-	for (var x = 0; x < allPosCharge.length; x++) {
-		if(allPosCharge[x].xSpeed>maxSpeed){
-			allPosCharge[x].xSpeed=maxSpeed;
-		}
-		if(allPosCharge[x].ySpeed>maxSpeed){
-			allPosCharge[x].ySpeed=maxSpeed;
-		}
-		allPosCharge[x].x+=xSpeed;
-		allPosCharge[x].y+=ySpeed;
-		if (allPosCharge[x].x >= canvas.width||allPosCharge[x].x <= -5) {
-            		allPosCharge[x].xSpeed=-allPosCharge[x].xSpeed;
-        	}
-        	if (allPosCharge[x].y >= canvas.height||allPosCharge[x].y <= -5) {
-        		allPosCharge[x].ySpeed = -allPosCharge[x].ySpeed;
-		}
-	}
-	for (var x = 0; x < allNegCharge.length; x++) {
-		if(allNegCharge[x].xSpeed>maxSpeed){
-			allNegCharge[x].xSpeed=maxSpeed;
-		}
-		if(allNegCharge[x].ySpeed>maxSpeed){
-			allNegCharge[x].ySpeed=maxSpeed;
-		}
-		allNegCharge[x].x+=xSpeed;
-		allNegCharge[x].y+=ySpeed;
-		if (allNegCharge[x].x >= canvas.width||allNegCharge[x].x <= -5) {
-            		allNegCharge[x].xSpeed=-allNegCharge[x].xSpeed;
-        	}
-        	if (allNegCharge[x].y >= canvas.height||allNegCharge[x].y <= -5) {
-        		allNegCharge[x].ySpeed = -allNegCharge[x].ySpeed;
-		}
-	}
+for (var x = 0; x < allPosCharge.length; x++) {
+for (var y = 0; y < allNegCharge.length; y++) {
+var difX = (allPosCharge[x].x-allNegCharge[y].x);
+var difY = (allPosCharge[x].y-allNegCharge[y].y);
+var dist =Math.sqrt((Math.pow(difX,2)+Math.pow(difY,2)));
+if(dist>5&&dist<maxDist){
+allPosCharge[x].xSpeed-=(difX*magConstant)/Math.pow(dist,2);
+allPosCharge[x].ySpeed-=(difY*magConstant)/Math.pow(dist,2);
+allNegCharge[y].xSpeed+=(difX*magConstant)/Math.pow(dist,2);
+allNegCharge[y].ySpeed+=(difY*magConstant)/Math.pow(dist,2);
+}
+}
+}
+for (var x = 0; x < allPosCharge.length; x++) {
+if(allPosCharge[x].xSpeed>maxSpeed){
+allPosCharge[x].xSpeed=maxSpeed;
+}
+if(allPosCharge[x].ySpeed>maxSpeed){
+allPosCharge[x].ySpeed=maxSpeed;
+}
+allPosCharge[x].x+=allPosCharge[x].xSpeed;
+allPosCharge[x].y+=allPosCharge[x].ySpeed;
+if (allPosCharge[x].x >= canvas.width||allPosCharge[x].x <= -5) {
+             allPosCharge[x].xSpeed=-allPosCharge[x].xSpeed;
+         }
+         if (allPosCharge[x].y >= canvas.height||allPosCharge[x].y <= -5) {
+         allPosCharge[x].ySpeed = -allPosCharge[x].ySpeed;
+}
+}
+for (var x = 0; x < allNegCharge.length; x++) {
+if(allNegCharge[x].xSpeed>maxSpeed){
+allNegCharge[x].xSpeed=maxSpeed;
+}
+if(allNegCharge[x].ySpeed>maxSpeed){
+allNegCharge[x].ySpeed=maxSpeed;
+}
+allNegCharge[x].x+=allNegCharge[x].xSpeed;
+allNegCharge[x].y+=allNegCharge[x].ySpeed;
+if (allNegCharge[x].x >= canvas.width||allNegCharge[x].x <= -5) {
+             allNegCharge[x].xSpeed=-allNegCharge[x].xSpeed;
+         }
+         if (allNegCharge[x].y >= canvas.height||allNegCharge[x].y <= -5) {
+         allNegCharge[x].ySpeed = -allNegCharge[x].ySpeed;
+}
+}
 }
 
 function drawCharges() {
@@ -104,9 +104,9 @@ function drawCharges() {
 }
 initializeCharge();
 
-	function main() {
-		moveCharges();
-		drawCharges();
-		requestAnimationFrame(main);
-	};
-	requestAnimationFrame(main);
+function main() {
+moveCharges();
+drawCharges();
+requestAnimationFrame(main);
+};
+requestAnimationFrame(main);
