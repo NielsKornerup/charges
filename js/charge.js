@@ -3,20 +3,20 @@ var ctx = canvas.getContext("2d");
 var width = canvas.width;
 var height = canvas.height;
 var chargeSpeed = 2;
-var chargeSize= 5;
-var numCharges = 25;
+var chargeSize= 10;
+var numCharges = 15;
 var allPosCharge=[];
 var allNegCharge=[];
-var magConstant = 5;
+var magConstant = 15;
 var PI = 3.141592;
-var maxSpeed = 3;
-var maxDist =30;
+var maxSpeed = 10;
+var maxDist =900;
 
 function initializeCharge() {
     for (var i = 0; i < numCharges; i++) {
         var charge = new Object();
-        charge.x = Math.random() * width;
-        charge.y = Math.random() * height;
+        charge.x = (Math.random() * (width-5))+5;
+        charge.y = (Math.random() * (height-5))+5;
         charge.xSpeed = Math.random() * chargeSpeed;
         charge.ySpeed = Math.random() * chargeSpeed;
 var cha = (Math.random() * 2) -1;
@@ -44,6 +44,32 @@ allNegCharge[y].ySpeed+=(difY*magConstant)/Math.pow(dist,2);
 }
 }
 for (var x = 0; x < allPosCharge.length; x++) {
+for (var y = 0; y < allPosCharge.length; y++) {
+var difX = (allPosCharge[x].x-allPosCharge[y].x);
+var difY = (allPosCharge[x].y-allPosCharge[y].y);
+var dist =Math.sqrt((Math.pow(difX,2)+Math.pow(difY,2)));
+if(dist>5&&dist<maxDist){
+allPosCharge[x].xSpeed+=(difX*magConstant)/Math.pow(dist,2);
+allPosCharge[x].ySpeed+=(difY*magConstant)/Math.pow(dist,2);
+allPosCharge[y].xSpeed-=(difX*magConstant)/Math.pow(dist,2);
+allPosCharge[y].ySpeed-=(difY*magConstant)/Math.pow(dist,2);
+}
+}
+}
+for (var x = 0; x < allNegCharge.length; x++) {
+for (var y = 0; y < allNegCharge.length; y++) {
+var difX = (allNegCharge[x].x-allNegCharge[y].x);
+var difY = (allNegCharge[x].y-allNegCharge[y].y);
+var dist =Math.sqrt((Math.pow(difX,2)+Math.pow(difY,2)));
+if(dist>5&&dist<maxDist){
+allNegCharge[x].xSpeed+=(difX*magConstant)/Math.pow(dist,2);
+allNegCharge[x].ySpeed+=(difY*magConstant)/Math.pow(dist,2);
+allNegCharge[y].xSpeed-=(difX*magConstant)/Math.pow(dist,2);
+allNegCharge[y].ySpeed-=(difY*magConstant)/Math.pow(dist,2);
+}
+}
+}
+for (var x = 0; x < allPosCharge.length; x++) {
 if(allPosCharge[x].xSpeed>maxSpeed){
 allPosCharge[x].xSpeed=maxSpeed;
 }
@@ -52,11 +78,17 @@ allPosCharge[x].ySpeed=maxSpeed;
 }
 allPosCharge[x].x+=allPosCharge[x].xSpeed;
 allPosCharge[x].y+=allPosCharge[x].ySpeed;
-if (allPosCharge[x].x >= canvas.width||allPosCharge[x].x <= -5) {
-             allPosCharge[x].xSpeed=-allPosCharge[x].xSpeed;
+if (allPosCharge[x].x >= canvas.width) {
+         	allPosCharge[x].xSpeed=-Math.abs(allPosCharge[x].xSpeed);
          }
-         if (allPosCharge[x].y >= canvas.height||allPosCharge[x].y <= -5) {
-         allPosCharge[x].ySpeed = -allPosCharge[x].ySpeed;
+if(allPosCharge[x].x <= 5){
+		allPosCharge[x].xSpeed=Math.abs(allPosCharge[x].xSpeed);
+	}
+         if (allPosCharge[x].y >= canvas.height) {
+         allPosCharge[x].ySpeed = -Math.abs(allPosCharge[x].ySpeed);
+}
+if(allPosCharge[x].y <= 5){
+	allPosCharge[x].ySpeed = Math.abs(allPosCharge[x].ySpeed);
 }
 }
 for (var x = 0; x < allNegCharge.length; x++) {
@@ -68,11 +100,17 @@ allNegCharge[x].ySpeed=maxSpeed;
 }
 allNegCharge[x].x+=allNegCharge[x].xSpeed;
 allNegCharge[x].y+=allNegCharge[x].ySpeed;
-if (allNegCharge[x].x >= canvas.width||allNegCharge[x].x <= -5) {
-             allNegCharge[x].xSpeed=-allNegCharge[x].xSpeed;
+if (allNegCharge[x].x >= canvas.width) {
+             allNegCharge[x].xSpeed=-Math.abs(allNegCharge[x].xSpeed);
          }
-         if (allNegCharge[x].y >= canvas.height||allNegCharge[x].y <= -5) {
-         allNegCharge[x].ySpeed = -allNegCharge[x].ySpeed;
+if(allNegCharge[x].x <= 5){
+		allNegCharge[x].xSpeed=Math.abs(allNegCharge[x].xSpeed);
+	}
+         if (allNegCharge[x].y >= canvas.height) {
+         allNegCharge[x].ySpeed = -Math.abs(allNegCharge[x].ySpeed);
+}
+if(allNegCharge[x].y <= 5){
+	allNegCharge[x].ySpeed = Math.abs(allNegCharge[x].ySpeed);
 }
 }
 }
