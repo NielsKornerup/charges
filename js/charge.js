@@ -142,6 +142,14 @@ function drawCharges() {
 }
 initializeCharge();
 
+$("#controls-submit").click(function() {
+numCharges = $("#numcharges").val();
+magConstant = $("#chargestr").val();
+allPosCharge=[];
+allNegCharge=[];
+initializeCharge();
+});
+
 function main() {
 moveCharges();
 drawCharges();
