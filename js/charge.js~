@@ -144,7 +144,7 @@ initializeCharge();
 
 $("#controls-submit").click(function() {
 numCharges = $("#numcharges").val();
-magConstant = $("#chargestr").val()/10;
+magConstant = $("#chargestr").val();
 allPosCharge=[];
 allNegCharge=[];
 initializeCharge();

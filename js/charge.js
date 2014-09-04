@@ -124,7 +124,7 @@ function drawCharges() {
         var colorString = 'rgb(255,0,0)';
         //ctx.fillStyle = colorString;
         ctx.strokeStyle = colorString;
-        ctx.arc(charge.x - (chargeSize / 2), charge.y - (chargeSize / 2), chargeSize, 0, 2 * PI);
+        ctx.arc(charge.x, charge.y, chargeSize, 0, 2 * PI);
         ctx.fill();
         ctx.stroke();
     }
