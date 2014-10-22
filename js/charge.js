@@ -7,7 +7,7 @@ var chargeSize= 10;
 var numCharges = 15;
 var allPosCharge=[];
 var allNegCharge=[];
-var magConstant = 15;
+var magConstant = 100;
 var PI = 3.141592;
 var maxSpeed = 10;
 var maxDist =900;
@@ -36,10 +36,10 @@ var difX = (allPosCharge[x].x-allNegCharge[y].x);
 var difY = (allPosCharge[x].y-allNegCharge[y].y);
 var dist =Math.sqrt((Math.pow(difX,2)+Math.pow(difY,2)));
 if(dist>5&&dist<maxDist){
-allPosCharge[x].xSpeed-=(difX*magConstant)/Math.pow(dist,2);
-allPosCharge[x].ySpeed-=(difY*magConstant)/Math.pow(dist,2);
-allNegCharge[y].xSpeed+=(difX*magConstant)/Math.pow(dist,2);
-allNegCharge[y].ySpeed+=(difY*magConstant)/Math.pow(dist,2);
+allPosCharge[x].xSpeed-=(difX*magConstant)/Math.pow(dist,3);
+allPosCharge[x].ySpeed-=(difY*magConstant)/Math.pow(dist,3);
+allNegCharge[y].xSpeed+=(difX*magConstant)/Math.pow(dist,3);
+allNegCharge[y].ySpeed+=(difY*magConstant)/Math.pow(dist,3);
 }
 }
 }
@@ -49,10 +49,10 @@ var difX = (allPosCharge[x].x-allPosCharge[y].x);
 var difY = (allPosCharge[x].y-allPosCharge[y].y);
 var dist =Math.sqrt((Math.pow(difX,2)+Math.pow(difY,2)));
 if(dist>5&&dist<maxDist){
-allPosCharge[x].xSpeed+=(difX*magConstant)/Math.pow(dist,2);
-allPosCharge[x].ySpeed+=(difY*magConstant)/Math.pow(dist,2);
-allPosCharge[y].xSpeed-=(difX*magConstant)/Math.pow(dist,2);
-allPosCharge[y].ySpeed-=(difY*magConstant)/Math.pow(dist,2);
+allPosCharge[x].xSpeed+=(difX*magConstant)/Math.pow(dist,3);
+allPosCharge[x].ySpeed+=(difY*magConstant)/Math.pow(dist,3);
+allPosCharge[y].xSpeed-=(difX*magConstant)/Math.pow(dist,3);
+allPosCharge[y].ySpeed-=(difY*magConstant)/Math.pow(dist,3);
 }
 }
 }
@@ -62,10 +62,10 @@ var difX = (allNegCharge[x].x-allNegCharge[y].x);
 var difY = (allNegCharge[x].y-allNegCharge[y].y);
 var dist =Math.sqrt((Math.pow(difX,2)+Math.pow(difY,2)));
 if(dist>5&&dist<maxDist){
-allNegCharge[x].xSpeed+=(difX*magConstant)/Math.pow(dist,2);
-allNegCharge[x].ySpeed+=(difY*magConstant)/Math.pow(dist,2);
-allNegCharge[y].xSpeed-=(difX*magConstant)/Math.pow(dist,2);
-allNegCharge[y].ySpeed-=(difY*magConstant)/Math.pow(dist,2);
+allNegCharge[x].xSpeed+=(difX*magConstant)/Math.pow(dist,3);
+allNegCharge[x].ySpeed+=(difY*magConstant)/Math.pow(dist,3);
+allNegCharge[y].xSpeed-=(difX*magConstant)/Math.pow(dist,3);
+allNegCharge[y].ySpeed-=(difY*magConstant)/Math.pow(dist,3);
 }
 }
 }
