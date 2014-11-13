@@ -44,7 +44,7 @@ allNegCharge[y].ySpeed+=(difY*magConstant)/Math.pow(dist,3);
 }
 }
 for (var x = 0; x < allPosCharge.length; x++) {
-for (var y = 0; y < allPosCharge.length; y++) {
+for (var y = x; y < allPosCharge.length; y++) {
 var difX = (allPosCharge[x].x-allPosCharge[y].x);
 var difY = (allPosCharge[x].y-allPosCharge[y].y);
 var dist =Math.sqrt((Math.pow(difX,2)+Math.pow(difY,2)));
@@ -57,7 +57,7 @@ allPosCharge[y].ySpeed-=(difY*magConstant)/Math.pow(dist,3);
 }
 }
 for (var x = 0; x < allNegCharge.length; x++) {
-for (var y = 0; y < allNegCharge.length; y++) {
+for (var y = x; y < allNegCharge.length; y++) {
 var difX = (allNegCharge[x].x-allNegCharge[y].x);
 var difY = (allNegCharge[x].y-allNegCharge[y].y);
 var dist =Math.sqrt((Math.pow(difX,2)+Math.pow(difY,2)));
