@@ -15,144 +15,133 @@ var collisions = false;
 
 function bounce(obj1,obj2){
 	if(collisions){
-		var aSpeed = Math.sqrt(Math.pow(obj1.xSpeed,2)+Math.pow(obj1.ySpeed,2));
-		var bSpeed = Math.sqrt(Math.pow(obj2.xSpeed,2)+Math.pow(obj2.ySpeed,2));
+		var aSpeed = Math.sqrt(Math.pow(obj1.velocity.x,2)+Math.pow(obj1.velocity.y,2));
+		var bSpeed = Math.sqrt(Math.pow(obj2.velocity.x,2)+Math.pow(obj2.velocity.y,2));
 		var difX2=0;
 		var difY2=0;
 		var dist2=0;
 		while(/*bSpeed<=aSpeed&&allParticles[a].radius<=allParticles[b].radius&&*/dist2<(obj1.radius+obj2.radius)){
-			difX2 = (obj1.x-obj2.x);
-			difY2 = (obj1.y-obj2.y);
+			difX2 = (obj1.position.x-obj2.position.x);
+			difY2 = (obj1.position.y-obj2.position.y);
 			dist2 =Math.sqrt((Math.pow(difX2,2)+Math.pow(difY2,2)));
-			obj1.x=obj1.x-obj1.xSpeed/10;
-			obj1.y=obj1.y-obj1.ySpeed/10;
+			obj1.position.x=obj1.position.x-obj1.velocity.x/10;
+			obj1.position.y=obj1.position.y-obj1.velocity.y/10;
 		}
-		var tempX = obj1.xSpeed;
-		var tempY = obj1.ySpeed;
-		obj1.xSpeed=obj2.xSpeed;
-		obj1.ySpeed=obj2.ySpeed;
-		obj2.xSpeed=tempX;
-		obj2.ySpeed=tempY;
+		var tempX = obj1.velocity.x;
+		var tempY = obj1.velocity.y;
+		obj1.velocity.x=obj2.velocity.x;
+		obj1.velocity.y=obj2.velocity.y;
+		obj2.velocity.x=tempX;
+		obj2.velocity.y=tempY;
 	}
 	return [obj1,obj2];
+}
+
+function calcNewVelocities(allPosCharge, allNegCharge){
+	for (var x = 0; x < allPosCharge.length; x++) {
+		for (var y = 0; y < allNegCharge.length; y++) {
+			var difX = (allPosCharge[x].position.x-allNegCharge[y].position.x);
+			var difY = (allPosCharge[x].position.y-allNegCharge[y].position.y);
+			var dist =Math.sqrt((Math.pow(difX,2)+Math.pow(difY,2)));
+			if(dist>20&&dist<maxDist){
+				allPosCharge[x].velocity.x-=(difX*magConstant)/Math.pow(dist,3);
+				allPosCharge[x].velocity.y-=(difY*magConstant)/Math.pow(dist,3);
+				allNegCharge[y].velocity.x+=(difX*magConstant)/Math.pow(dist,3);
+				allNegCharge[y].velocity.y+=(difY*magConstant)/Math.pow(dist,3);
+			}
+			else{
+				var newObjects=bounce(allPosCharge[x],allNegCharge[y]);
+				allPosCharge[x]=newObjects[0];
+				allNegCharge[y]=newObjects[1];
+			}
+		}
+	}
+	for (var x = 0; x < allPosCharge.length; x++) {
+		for (var y = x; y < allPosCharge.length; y++) {
+			var difX = (allPosCharge[x].position.x-allPosCharge[y].position.x);
+			var difY = (allPosCharge[x].position.y-allPosCharge[y].position.y);
+			var dist =Math.sqrt((Math.pow(difX,2)+Math.pow(difY,2)));
+			if(dist>20&&dist<maxDist){
+				allPosCharge[x].velocity.x+=(difX*magConstant)/Math.pow(dist,3);
+				allPosCharge[x].velocity.y+=(difY*magConstant)/Math.pow(dist,3);
+				allPosCharge[y].velocity.x-=(difX*magConstant)/Math.pow(dist,3);
+				allPosCharge[y].velocity.y-=(difY*magConstant)/Math.pow(dist,3);
+			}
+			else{
+				var newObjects=bounce(allPosCharge[x],allPosCharge[y]);
+				allPosCharge[x]=newObjects[0];
+				allPosCharge[y]=newObjects[1];
+			}
+		}
+	}
+	for (var x = 0; x < allNegCharge.length; x++) {
+		for (var y = x; y < allNegCharge.length; y++) {
+			var difX = (allNegCharge[x].position.x-allNegCharge[y].position.x);
+			var difY = (allNegCharge[x].position.y-allNegCharge[y].position.y);
+			var dist =Math.sqrt((Math.pow(difX,2)+Math.pow(difY,2)));
+			if(dist>20&&dist<maxDist){
+				allNegCharge[x].velocity.x+=(difX*magConstant)/Math.pow(dist,3);
+				allNegCharge[x].velocity.y+=(difY*magConstant)/Math.pow(dist,3);
+				allNegCharge[y].velocity.x-=(difX*magConstant)/Math.pow(dist,3);
+				allNegCharge[y].velocity.y-=(difY*magConstant)/Math.pow(dist,3);
+			}
+			else{
+				var newObjects=bounce(allNegCharge[x],allNegCharge[y]);
+				allNegCharge[x]=newObjects[0];
+				allNegCharge[y]=newObjects[1];
+			}
+		}
+	}
+}
+
+function move(allParticles){
+	for (var x = 0; x < allParticles.length; x++) {
+		if(allParticles[x].velocity.x>maxSpeed){
+			allParticles[x].velocity.x=maxSpeed;
+		}
+		if(allParticles[x].velocity.y>maxSpeed){
+			allParticles[x].velocity.y=maxSpeed;
+		}
+		allParticles[x].position.x+=allParticles[x].velocity.x;
+		allParticles[x].position.y+=allParticles[x].velocity.y;
+		if (allParticles[x].position.x >= canvas.width) {
+	         	allParticles[x].velocity.x=-Math.abs(allParticles[x].velocity.x);
+	        }
+		if(allParticles[x].position.x <= 5){
+			allParticles[x].velocity.x=Math.abs(allParticles[x].velocity.x);
+		}
+	        if (allParticles[x].position.y >= canvas.height) {
+         		allParticles[x].velocity.y = -Math.abs(allParticles[x].velocity.y);
+		}
+		if(allParticles[x].position.y <= 5){
+			allParticles[x].velocity.y = Math.abs(allParticles[x].velocity.y);
+		}
+	}
 }
 
 function initializeCharge() {
     for (var i = 0; i < numCharges; i++) {
         var charge = new Object();
-        charge.x = (Math.random() * (width-5))+5;
-        charge.y = (Math.random() * (height-5))+5;
-        charge.xSpeed = Math.random() * chargeSpeed;
-        charge.ySpeed = Math.random() * chargeSpeed;
-var cha = (Math.random() * 2) -1;
-if(cha>0){
-allPosCharge.push(charge);
-}
-else{
-allNegCharge.push(charge);
-}
+	charge.position=new Object();
+	charge.velocity=new Object();
+        charge.position.x = (Math.random() * (width-5))+5;
+        charge.position.y = (Math.random() * (height-5))+5;
+        charge.velocity.x = Math.random() * chargeSpeed;
+        charge.velocity.y = Math.random() * chargeSpeed;
+	var cha = (Math.random() * 2) -1;
+	if(cha>0){
+		allPosCharge.push(charge);
+	}
+	else{
+		allNegCharge.push(charge);
+	}
     }
 }
 
 function moveCharges(){
-for (var x = 0; x < allPosCharge.length; x++) {
-for (var y = 0; y < allNegCharge.length; y++) {
-var difX = (allPosCharge[x].x-allNegCharge[y].x);
-var difY = (allPosCharge[x].y-allNegCharge[y].y);
-var dist =Math.sqrt((Math.pow(difX,2)+Math.pow(difY,2)));
-if(dist>20&&dist<maxDist){
-allPosCharge[x].xSpeed-=(difX*magConstant)/Math.pow(dist,3);
-allPosCharge[x].ySpeed-=(difY*magConstant)/Math.pow(dist,3);
-allNegCharge[y].xSpeed+=(difX*magConstant)/Math.pow(dist,3);
-allNegCharge[y].ySpeed+=(difY*magConstant)/Math.pow(dist,3);
-}
-else{
-var newObjects=bounce(allPosCharge[x],allNegCharge[y]);
-allPosCharge[x]=newObjects[0];
-allNegCharge[y]=newObjects[1];
-}
-}
-}
-for (var x = 0; x < allPosCharge.length; x++) {
-for (var y = x; y < allPosCharge.length; y++) {
-var difX = (allPosCharge[x].x-allPosCharge[y].x);
-var difY = (allPosCharge[x].y-allPosCharge[y].y);
-var dist =Math.sqrt((Math.pow(difX,2)+Math.pow(difY,2)));
-if(dist>20&&dist<maxDist){
-allPosCharge[x].xSpeed+=(difX*magConstant)/Math.pow(dist,3);
-allPosCharge[x].ySpeed+=(difY*magConstant)/Math.pow(dist,3);
-allPosCharge[y].xSpeed-=(difX*magConstant)/Math.pow(dist,3);
-allPosCharge[y].ySpeed-=(difY*magConstant)/Math.pow(dist,3);
-}
-else{
-var newObjects=bounce(allPosCharge[x],allPosCharge[y]);
-allPosCharge[x]=newObjects[0];
-allPosCharge[y]=newObjects[1];
-}
-}
-}
-for (var x = 0; x < allNegCharge.length; x++) {
-for (var y = x; y < allNegCharge.length; y++) {
-var difX = (allNegCharge[x].x-allNegCharge[y].x);
-var difY = (allNegCharge[x].y-allNegCharge[y].y);
-var dist =Math.sqrt((Math.pow(difX,2)+Math.pow(difY,2)));
-if(dist>20&&dist<maxDist){
-allNegCharge[x].xSpeed+=(difX*magConstant)/Math.pow(dist,3);
-allNegCharge[x].ySpeed+=(difY*magConstant)/Math.pow(dist,3);
-allNegCharge[y].xSpeed-=(difX*magConstant)/Math.pow(dist,3);
-allNegCharge[y].ySpeed-=(difY*magConstant)/Math.pow(dist,3);
-}
-else{
-var newObjects=bounce(allNegCharge[x],allNegCharge[y]);
-allNegCharge[x]=newObjects[0];
-allNegCharge[y]=newObjects[1];
-}
-}
-}
-for (var x = 0; x < allPosCharge.length; x++) {
-if(allPosCharge[x].xSpeed>maxSpeed){
-allPosCharge[x].xSpeed=maxSpeed;
-}
-if(allPosCharge[x].ySpeed>maxSpeed){
-allPosCharge[x].ySpeed=maxSpeed;
-}
-allPosCharge[x].x+=allPosCharge[x].xSpeed;
-allPosCharge[x].y+=allPosCharge[x].ySpeed;
-if (allPosCharge[x].x >= canvas.width) {
-         	allPosCharge[x].xSpeed=-Math.abs(allPosCharge[x].xSpeed);
-         }
-if(allPosCharge[x].x <= 5){
-		allPosCharge[x].xSpeed=Math.abs(allPosCharge[x].xSpeed);
-	}
-         if (allPosCharge[x].y >= canvas.height) {
-         allPosCharge[x].ySpeed = -Math.abs(allPosCharge[x].ySpeed);
-}
-if(allPosCharge[x].y <= 5){
-	allPosCharge[x].ySpeed = Math.abs(allPosCharge[x].ySpeed);
-}
-}
-for (var x = 0; x < allNegCharge.length; x++) {
-if(allNegCharge[x].xSpeed>maxSpeed){
-allNegCharge[x].xSpeed=maxSpeed;
-}
-if(allNegCharge[x].ySpeed>maxSpeed){
-allNegCharge[x].ySpeed=maxSpeed;
-}
-allNegCharge[x].x+=allNegCharge[x].xSpeed;
-allNegCharge[x].y+=allNegCharge[x].ySpeed;
-if (allNegCharge[x].x >= canvas.width) {
-             allNegCharge[x].xSpeed=-Math.abs(allNegCharge[x].xSpeed);
-         }
-if(allNegCharge[x].x <= 5){
-		allNegCharge[x].xSpeed=Math.abs(allNegCharge[x].xSpeed);
-	}
-         if (allNegCharge[x].y >= canvas.height) {
-         allNegCharge[x].ySpeed = -Math.abs(allNegCharge[x].ySpeed);
-}
-if(allNegCharge[x].y <= 5){
-	allNegCharge[x].ySpeed = Math.abs(allNegCharge[x].ySpeed);
-}
-}
+	calcNewVelocities(allPosCharge, allNegCharge);
+	move(allPosCharge);
+	move(allNegCharge);
 }
 
 function drawCharges() {
@@ -164,7 +153,7 @@ function drawCharges() {
         var colorString = 'rgb(255,0,0)';
         //ctx.fillStyle = colorString;
         ctx.strokeStyle = colorString;
-        ctx.arc(charge.x, charge.y, chargeSize, 0, 2 * PI);
+        ctx.arc(charge.position.x, charge.position.y, chargeSize, 0, 2 * PI);
         ctx.fill();
         ctx.stroke();
     }
@@ -175,7 +164,7 @@ function drawCharges() {
         var colorString = 'rgb(0,0,255)';
        //ctx.fillStyle = colorString;
         ctx.strokeStyle = colorString;
-        ctx.arc(charge.x - (chargeSize / 2), charge.y - (chargeSize / 2), chargeSize, 0, 2 * PI);
+        ctx.arc(charge.position.x - (chargeSize / 2), charge.position.y - (chargeSize / 2), chargeSize, 0, 2 * PI);
         ctx.fill();
         ctx.stroke();
     }
@@ -183,17 +172,17 @@ function drawCharges() {
 initializeCharge();
 
 $("#controls-submit").click(function() {
-numCharges = $("#numcharges").val();
-magConstant = $("#chargestr").val();
-collisions = $("#collisions").is(":checked");
-allPosCharge=[];
-allNegCharge=[];
-initializeCharge();
+	numCharges = $("#numcharges").val();
+	magConstant = $("#chargestr").val()*10;
+	collisions = $("#collisions").is(":checked");
+	allPosCharge=[];
+	allNegCharge=[];
+	initializeCharge();
 });
 
 function main() {
-moveCharges();
-drawCharges();
-requestAnimationFrame(main);
+	moveCharges();
+	drawCharges();
+	requestAnimationFrame(main);
 };
 requestAnimationFrame(main);
