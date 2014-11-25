@@ -120,22 +120,24 @@ function move(allParticles){
 }
 
 function initializeCharge() {
-    for (var i = 0; i < numCharges; i++) {
-        var charge = new Object();
-	charge.position=new Object();
-	charge.velocity=new Object();
-        charge.position.x = (Math.random() * (width-5))+5;
-        charge.position.y = (Math.random() * (height-5))+5;
-        charge.velocity.x = Math.random() * chargeSpeed;
-        charge.velocity.y = Math.random() * chargeSpeed;
-	var cha = (Math.random() * 2) -1;
-	if(cha>0){
-		allPosCharge.push(charge);
+	document.getElementById("numcharges").value=numCharges;
+	document.getElementById("chargestr").value=magConstant/10;
+	for (var i = 0; i < numCharges; i++) {
+	        var charge = new Object();
+		charge.position=new Object();
+		charge.velocity=new Object();
+	        charge.position.x = (Math.random() * (width-5))+5;
+	        charge.position.y = (Math.random() * (height-5))+5;
+	        charge.velocity.x = Math.random() * chargeSpeed;
+	        charge.velocity.y = Math.random() * chargeSpeed;
+		var cha = (Math.random() * 2) -1;
+		if(cha>0){
+			allPosCharge.push(charge);
+		}
+		else{
+			allNegCharge.push(charge);
+		}
 	}
-	else{
-		allNegCharge.push(charge);
-	}
-    }
 }
 
 function moveCharges(){
