@@ -1,5 +1,7 @@
 var canvas = document.getElementById("charge-canvas");
 var ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth*2/3-10;
+canvas.height = window.innerHeight-10;
 var width = canvas.width;
 var height = canvas.height;
 var chargeSpeed = 2;
@@ -174,12 +176,20 @@ function drawCharges() {
 initializeCharge();
 
 $("#controls-submit").click(function() {
-	numCharges = $("#numcharges").val();
-	magConstant = $("#chargestr").val()*10;
-	collisions = $("#collisions").is(":checked");
-	allPosCharge=[];
-	allNegCharge=[];
-	initializeCharge();
+	if($("#numcharges").val()>100){
+		alert("please use no more than 100 charges");
+	}
+	else if ( $("#chargestr").val() > 100 ){
+		alert("please use a charge strength of no more than 100");
+	}
+	else{
+		numCharges = $("#numcharges").val();
+		magConstant = $("#chargestr").val()*10;
+		collisions = $("#collisions").is(":checked");
+		allPosCharge=[];
+		allNegCharge=[];
+		initializeCharge();
+	}
 });
 
 function main() {
