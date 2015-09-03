@@ -51,7 +51,7 @@ function calcNewVelocities(allPosCharge, allNegCharge){
 				allNegCharge[y].velocity.x+=(difX*magConstant)/Math.pow(dist,3);
 				allNegCharge[y].velocity.y+=(difY*magConstant)/Math.pow(dist,3);
 			}
-			else{
+			else if (dist <= 20){
 				var newObjects=bounce(allPosCharge[x],allNegCharge[y]);
 				allPosCharge[x]=newObjects[0];
 				allNegCharge[y]=newObjects[1];
@@ -69,7 +69,7 @@ function calcNewVelocities(allPosCharge, allNegCharge){
 				allPosCharge[y].velocity.x-=(difX*magConstant)/Math.pow(dist,3);
 				allPosCharge[y].velocity.y-=(difY*magConstant)/Math.pow(dist,3);
 			}
-			else{
+			else if (dist <= 20){
 				var newObjects=bounce(allPosCharge[x],allPosCharge[y]);
 				allPosCharge[x]=newObjects[0];
 				allPosCharge[y]=newObjects[1];
@@ -87,7 +87,7 @@ function calcNewVelocities(allPosCharge, allNegCharge){
 				allNegCharge[y].velocity.x-=(difX*magConstant)/Math.pow(dist,3);
 				allNegCharge[y].velocity.y-=(difY*magConstant)/Math.pow(dist,3);
 			}
-			else{
+			else if (dist <= 20){
 				var newObjects=bounce(allNegCharge[x],allNegCharge[y]);
 				allNegCharge[x]=newObjects[0];
 				allNegCharge[y]=newObjects[1];
@@ -176,10 +176,10 @@ function drawCharges() {
 initializeCharge();
 
 $("#controls-submit").click(function() {
-	if($("#numcharges").val()>100){
+	if($("#numcharges").val()>100 || $("#numcharges").val()<0){
 		alert("please use no more than 100 charges");
 	}
-	else if ( $("#chargestr").val() > 100 ){
+	else if ( $("#chargestr").val() > 100 || $("#chargestr").val() <-100){
 		alert("please use a charge strength of no more than 100");
 	}
 	else{
