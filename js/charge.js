@@ -106,13 +106,13 @@ function move(allParticles){
 		}
 		allParticles[x].position.x+=allParticles[x].velocity.x;
 		allParticles[x].position.y+=allParticles[x].velocity.y;
-		if (allParticles[x].position.x >= canvas.width) {
+		if (allParticles[x].position.x + 5>= canvas.width) {
 	         	allParticles[x].velocity.x=-Math.abs(allParticles[x].velocity.x);
 	        }
 		if(allParticles[x].position.x <= 5){
 			allParticles[x].velocity.x=Math.abs(allParticles[x].velocity.x);
 		}
-	        if (allParticles[x].position.y >= canvas.height) {
+	        if (allParticles[x].position.y +5 >= canvas.height) {
          		allParticles[x].velocity.y = -Math.abs(allParticles[x].velocity.y);
 		}
 		if(allParticles[x].position.y <= 5){
